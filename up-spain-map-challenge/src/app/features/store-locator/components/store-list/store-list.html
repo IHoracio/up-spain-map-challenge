@@ -1,0 +1,27 @@
+<section class="store-list" aria-labelledby="store-list-title">
+  <h2 class="store-list__title" id="store-list-title">Stores</h2>
+
+  @if (stores().length === 0) {
+    @if (emptyMessage()) {
+      <p class="store-list__empty">{{ emptyMessage() }}</p>
+    }
+  } @else {
+    <ul class="store-list__items" aria-label="Stores in Spain">
+      @for (store of stores(); track store.id) {
+        <li class="store-list__item">
+          <button
+            class="store-list__button"
+            [class.store-list__button--selected]="store.id === selectedStoreId()"
+            [attr.aria-pressed]="store.id === selectedStoreId()"
+            [attr.data-store-id]="store.id"
+            type="button"
+            (click)="selectStore(store)"
+          >
+            <span class="store-list__name">{{ store.name }}</span>
+            <span class="store-list__location">{{ locationLabel(store) }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</section>

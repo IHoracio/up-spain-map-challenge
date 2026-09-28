@@ -1,0 +1,30 @@
+<section class="store-search" aria-label="Search for a store">
+  <label class="store-search__label" for="store-search-input">Search stores</label>
+  <div class="store-search__controls">
+    <input
+      #searchInput
+      class="store-search__input"
+      id="store-search-input"
+      type="search"
+      autocomplete="off"
+      placeholder="Enter a store name"
+      [value]="query()"
+      (input)="onQueryInput($event)"
+      (keydown.enter)="selectUniqueResult()"
+    />
+    <button
+      class="store-search__clear"
+      type="button"
+      aria-label="Clear store search"
+      [disabled]="query().length === 0"
+      (click)="query.set('')"
+    >
+      Clear
+    </button>
+  </div>
+  @if (normalizedQuery()) {
+    <p class="store-search__status" role="status" aria-live="polite">
+      {{ resultMessage() }}
+    </p>
+  }
+</section>

@@ -1,0 +1,32 @@
+.store-details {
+  padding-block: 0.75rem;
+}
+
+.store-details__name {
+  margin: 0 0 0.75rem;
+  color: #17352b;
+  font-size: 1.25rem;
+}
+
+.store-details__facts {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.store-details__fact {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.store-details__label {
+  color: #435e53;
+  font-size: 0.875rem;
+}
+
+.store-details__value {
+  margin: 0;
+  color: #19362c;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
