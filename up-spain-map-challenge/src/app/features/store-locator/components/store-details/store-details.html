@@ -1,0 +1,21 @@
+<section class="store-details" aria-labelledby="store-details-title">
+  <h2 class="store-details__name" id="store-details-title">{{ store().name }}</h2>
+  <dl class="store-details__facts">
+    <div class="store-details__fact">
+      <dt class="store-details__label">Location</dt>
+      <dd class="store-details__value">{{ locationLabel(store()) }}</dd>
+    </div>
+    <div class="store-details__fact">
+      <dt class="store-details__label">Products in stock</dt>
+      <dd class="store-details__value" aria-live="polite">
+        @if (productState() === 'loading') {
+          Loading
+        } @else if (productState() === 'error') {
+          Unavailable
+        } @else {
+          {{ availableProductCount() ?? 0 }}
+        }
+      </dd>
+    </div>
+  </dl>
+</section>
