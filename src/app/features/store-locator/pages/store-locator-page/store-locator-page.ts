@@ -20,6 +20,7 @@ import type { Product } from '../../../../core/models/product.model';
 import type { Store } from '../../../../core/models/store.model';
 import { ProductService } from '../../../../core/services/product.service';
 import { StoreService } from '../../../../core/services/store.service';
+import { ViewportService } from '../../../../core/services/viewport.service';
 
 @Component({
   imports: [
@@ -45,6 +46,7 @@ export class StoreLocatorPage {
   private readonly router = inject(Router);
   private readonly storeService = inject(StoreService);
   private readonly productService = inject(ProductService);
+  private readonly viewport = inject(ViewportService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly pageHeading = viewChild<ElementRef<HTMLHeadingElement>>('pageHeading');
   private storeRequestId = 0;
@@ -95,7 +97,7 @@ export class StoreLocatorPage {
   );
 
   private readonly focusSelectedView = effect(() => {
-    if (this.selectedStore()) {
+    if (this.selectedStore() && !this.viewport.isMobile()) {
       this.pageHeading()?.nativeElement.focus();
     }
   });
