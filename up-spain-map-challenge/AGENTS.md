@@ -57,3 +57,25 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use the `providedIn: 'root'` option for singleton services
 - Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
 - Use the `inject()` function instead of constructor injection
+
+## UP Spain Challenge: Project Specifics
+
+- **Styles:** Use SCSS with strict BEM (Block Element Modifier) methodology for all components.
+- **Data Handling:** Use `RxJS` exclusively in services for simulating API calls. Apply an 800ms `delay` to simulate network latency so loading states can be tested.
+
+### Data Models (Mock Data)
+```typescript
+export interface Store { 
+  id: number; 
+  name: string; 
+  latitude: number; 
+  longitude: number; 
+}
+
+export interface Product { 
+  id: number; 
+  storeId: number; 
+  name: string; 
+  price: number; 
+  stock: number; 
+}
