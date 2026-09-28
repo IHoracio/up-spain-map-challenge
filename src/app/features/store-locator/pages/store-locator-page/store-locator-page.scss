@@ -53,6 +53,12 @@
   gap: 1rem;
 }
 
+@media (min-width: 761px) {
+  .store-locator-page__details-panel {
+    align-self: stretch;
+  }
+}
+
 .store-locator-page__prompt {
   margin: 0;
   color: #435e53;
