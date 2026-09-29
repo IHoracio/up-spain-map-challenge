@@ -18,7 +18,9 @@
             (click)="selectStore(store)"
           >
             <span class="store-list__name">{{ store.name }}</span>
-            <span class="store-list__location">{{ locationLabel(store) }}</span>
+            <span class="store-list__location">
+              {{ (storeAddresses.getAddress(store) | async) ?? 'Loading address…' }}
+            </span>
           </button>
         </li>
       }
