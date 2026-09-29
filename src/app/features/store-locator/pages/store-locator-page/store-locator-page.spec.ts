@@ -7,6 +7,7 @@ import { MOCK_PRODUCTS } from '../../../../core/data/mock-products';
 import { MOCK_STORES } from '../../../../core/data/mock-stores';
 import type { Product } from '../../../../core/models/product.model';
 import { ProductService } from '../../../../core/services/product.service';
+import { StoreAddressService } from '../../../../core/services/store-address.service';
 import { StoreService } from '../../../../core/services/store.service';
 import {
   createLeafletTestDouble,
@@ -45,6 +46,10 @@ describe('StoreLocatorPage', () => {
         provideRouter(testRoutes),
         provideStoreResponse(MOCK_STORES),
         provideProductResponse(MOCK_PRODUCTS),
+        {
+          provide: StoreAddressService,
+          useValue: { getAddress: () => of('Calle Mayor, 5') },
+        },
         leaflet.provider,
       ],
     }).compileComponents();
@@ -96,7 +101,7 @@ describe('StoreLocatorPage', () => {
 
     const page = fixture.nativeElement as HTMLElement;
     expect(page.textContent).toContain('UP Madrid Centro');
-    expect(page.textContent).toContain('40.4168, -3.7038');
+    expect(page.textContent).toContain('Calle Mayor, 5');
     expect(
       page.querySelector('.store-details__value[aria-live="polite"]')?.textContent?.trim(),
     ).toBe('1');
