@@ -1,5 +1,6 @@
 import { Component, computed, input, model, output } from '@angular/core';
 import type { Store } from '../../../../core/models/store.model';
+import { isValidCoordinates } from '../../../../core/utils/store-coordinates';
 
 @Component({
   selector: 'app-store-search',
@@ -16,9 +17,11 @@ export class StoreSearchComponent {
   readonly results = computed(() => {
     const query = this.normalizedQuery();
     const stores = this.stores();
-    return query
-      ? stores.filter((store) => store.name.trim().toLowerCase().includes(query))
-      : stores;
+    return stores.filter(
+      (store) =>
+        isValidCoordinates(store.latitude, store.longitude) &&
+        (!query || store.name.trim().toLowerCase().includes(query)),
+    );
   });
 
   protected resultMessage(): string {
