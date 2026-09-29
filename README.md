@@ -54,9 +54,12 @@ Open [http://localhost:8080](http://localhost:8080). Refresh a direct route such
 ## Future improvements
 
 - Connect the typed services to a production store and inventory API.
-- Add server-side search, richer filtering, and localized currency/number formatting when the catalog grows.
+- Add server-side search and richer filtering as the catalog grows.
+- Add a Spanish translation and locale-aware number formatting, including commas as decimal separators when Spanish is selected.
+- Create a reusable spinner component and overlay it on components while they load data.
+- Enlarge the map marker for the focused or selected store to make it easier to identify.
 - Add browser-level visual and responsive checks against real map tiles and a deployed Nginx container.
 
 ## AI and external tools
 
-AI assistance was used during implementation and review. The application uses OpenStreetMap map tiles and displays the required contributor attribution; no external store or inventory API is used.
+GPT-6 Luna was used via the API for agentic programming, and GitHub Spec Kit supported specification-driven development. The application uses OpenStreetMap map tiles and displays the required contributor attribution; no external store or inventory API is used.
