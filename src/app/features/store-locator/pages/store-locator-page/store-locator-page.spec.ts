@@ -10,13 +10,13 @@ import { ProductService } from '../../../../core/services/product.service';
 import { StoreAddressService } from '../../../../core/services/store-address.service';
 import { StoreService } from '../../../../core/services/store.service';
 import { isValidCoordinates } from '../../../../core/utils/store-coordinates';
+import { STORE_LOCATOR_ROUTES } from '../../store-locator.routes';
 import {
   createLeafletTestDouble,
   provideProductResponse,
   provideStoreResponse,
   type LeafletTestDouble,
 } from '../../../../../testing/store-locator-test-helpers';
-import { StoreLocatorPage } from './store-locator-page';
 
 @Component({
   imports: [RouterOutlet],
@@ -27,10 +27,7 @@ class TestRouterHost {}
 const testRoutes: Routes = [
   {
     path: 'stores',
-    children: [
-      { path: '', component: StoreLocatorPage },
-      { path: ':storeId', component: StoreLocatorPage },
-    ],
+    children: STORE_LOCATOR_ROUTES,
   },
 ];
 
@@ -77,6 +74,7 @@ describe('StoreLocatorPage', () => {
   }
 
   it('navigates to the selected store when its list button is activated', async () => {
+    const getStores = vi.spyOn(TestBed.inject(StoreService), 'getStores');
     await open('/stores');
     const button = fixture.nativeElement.querySelector(
       '.store-list__button',
@@ -86,6 +84,10 @@ describe('StoreLocatorPage', () => {
     fixture.detectChanges();
 
     expect(router.url).toBe('/stores/1');
+    expect(
+      fixture.nativeElement.querySelector('.store-details__name')?.textContent?.trim(),
+    ).toBe('UP Madrid Centro');
+    expect(getStores).toHaveBeenCalledTimes(1);
   });
 
   it('navigates to the same store when its map marker is activated', async () => {
