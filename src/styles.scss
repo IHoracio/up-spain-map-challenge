@@ -38,11 +38,3 @@ input {
   height: 100%;
 }
 
-@media (max-width: 760px) {
-  .store-map__canvas .leaflet-marker-icon {
-    width: 19px !important;
-    height: 31px !important;
-    margin-top: 10px;
-    margin-left: 3px;
-  }
-}
