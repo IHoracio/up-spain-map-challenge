@@ -1,0 +1,53 @@
+<section class="product-catalog" aria-labelledby="product-catalog-title">
+  <h2 class="product-catalog__title" id="product-catalog-title">Products</h2>
+
+  @if (state() === 'loading') {
+    <p class="product-catalog__state" role="status">Loading products…</p>
+  } @else if (state() === 'error') {
+    <div class="product-catalog__error" role="alert">
+      <p>Products could not be loaded.</p>
+      <button
+        class="product-catalog__retry"
+        type="button"
+        aria-label="Retry loading products"
+        (click)="retry.emit()"
+      >
+        Try again
+      </button>
+    </div>
+  } @else if (products().length === 0) {
+    <p class="product-catalog__empty">No products are listed for this store.</p>
+  } @else {
+    <ul class="product-catalog__items">
+      @for (product of products(); track product.id) {
+        <li class="product-catalog__item">
+          <h3 class="product-catalog__name">{{ productName(product) }}</h3>
+          <p class="product-catalog__price">
+            @if (hasPrice(product)) {
+              @let formattedPrice = product.price | currency: 'EUR':'symbol':'1.2-2';
+              {{ formattedPrice?.slice(1) }} {{ formattedPrice?.slice(0, 1) }}
+            } @else {
+              Price unavailable
+            }
+          </p>
+          <p class="product-catalog__stock">
+            @if (hasStock(product)) {
+              Stock: {{ product.stock }}
+            } @else {
+              Stock unavailable
+            }
+          </p>
+          @if (!hasStock(product)) {
+            <p class="product-catalog__availability">Availability unavailable</p>
+          } @else if (product.stock === 0) {
+            <p class="product-catalog__availability product-catalog__availability--out-of-stock">
+              Out of stock
+            </p>
+          } @else {
+            <p class="product-catalog__availability">In stock</p>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>

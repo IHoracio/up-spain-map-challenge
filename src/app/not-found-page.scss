@@ -1,0 +1,30 @@
+.not-found-page {
+  width: min(100% - 2rem, 48rem);
+  margin: 3rem auto;
+  padding: 1.5rem;
+  border: 1px solid #d1ded7;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #19362c;
+}
+
+.not-found-page__title {
+  margin: 0;
+  color: #17352b;
+}
+
+.not-found-page__message {
+  color: #435e53;
+  line-height: 1.5;
+}
+
+.not-found-page__link {
+  color: #14563f;
+  font-weight: 700;
+  text-underline-offset: 0.15em;
+}
+
+.not-found-page__link:focus-visible {
+  outline: 3px solid #14563f;
+  outline-offset: 3px;
+}

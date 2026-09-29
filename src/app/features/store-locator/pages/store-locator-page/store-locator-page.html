@@ -1,0 +1,76 @@
+<main class="store-locator-page">
+  <header class="store-locator-page__header">
+    <p class="store-locator-page__eyebrow">UP Spain</p>
+    <h1 #pageHeading class="store-locator-page__title" tabindex="-1">Find a store</h1>
+    <p class="store-locator-page__intro">
+      Explore stores across Spain and check the products available at each location.
+    </p>
+  </header>
+
+  @if (storeState() === 'loading') {
+    <p class="store-locator-page__state" role="status">Loading stores…</p>
+  } @else if (storeState() === 'error') {
+    <section class="store-locator-page__state" role="alert">
+      <p>Stores could not be loaded.</p>
+      <button
+        class="store-locator-page__retry"
+        type="button"
+        aria-label="Retry loading stores"
+        (click)="retryStores()"
+      >
+        Try again
+      </button>
+    </section>
+  } @else if (stores().length === 0) {
+    <p class="store-locator-page__state" role="status">
+      No stores are available at the moment.
+    </p>
+  } @else if (selectedStoreId() !== null && selectedStore() === null) {
+    <section class="store-locator-page__not-found" aria-labelledby="store-not-found-title">
+      <h2 id="store-not-found-title">Store not found</h2>
+      <p>The requested store is unavailable. Browse the store list to continue.</p>
+      <a class="store-locator-page__back-link" routerLink="/stores">Return to all stores</a>
+    </section>
+  } @else {
+    <div class="store-locator-page__workspace">
+      <section class="store-locator-page__map-panel" aria-label="Store map">
+        <app-store-map
+          [stores]="stores()"
+          [selectedStoreId]="selectedStoreId()"
+          (storeSelected)="selectStore($event)"
+        />
+      </section>
+
+      <aside class="store-locator-page__details-panel" aria-label="Store finder">
+        <app-store-search
+          [stores]="stores()"
+          [(query)]="searchQuery"
+          (storeSelected)="selectStore($event)"
+        />
+        <app-store-list
+          [stores]="matchingStores()"
+          [selectedStoreId]="selectedStoreId()"
+          [emptyMessage]="searchQuery().trim() ? '' : 'No stores are available.'"
+          (storeSelected)="selectStore($event)"
+        />
+
+        @if (selectedStore(); as store) {
+          <app-store-details
+            [store]="store"
+            [availableProductCount]="availableProductCount()"
+            [productState]="productState()"
+          />
+          <app-product-catalog
+            [products]="selectedProducts()"
+            [state]="productState()"
+            (retry)="retryProducts()"
+          />
+        } @else {
+          <p class="store-locator-page__prompt">
+            Choose a store from the map or list to see its details and products.
+          </p>
+        }
+      </aside>
+    </div>
+  }
+</main>

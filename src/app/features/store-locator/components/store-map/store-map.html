@@ -1,0 +1,43 @@
+<section class="store-map" aria-label="Map of store locations">
+  <div class="store-map__toolbar" aria-label="Map controls">
+    <p class="store-map__hint">Use the arrow keys to move the map.</p>
+    <div class="store-map__zoom-controls">
+      <button
+        class="store-map__zoom-button"
+        type="button"
+        aria-label="Zoom in"
+        (click)="zoomIn()"
+      >
+        <span class="store-map__zoom-icon" aria-hidden="true">+</span>
+      </button>
+      <button
+        class="store-map__zoom-button"
+        type="button"
+        aria-label="Zoom out"
+        (click)="zoomOut()"
+      >
+        <span class="store-map__zoom-icon" aria-hidden="true">−</span>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="store-map__canvas"
+    role="application"
+    aria-label="Interactive store map. Use arrow keys to pan and plus or minus to zoom."
+    tabindex="0"
+  ></div>
+
+  @if (tileError()) {
+    <p class="store-map__warning" role="status">
+      Map tiles could not be loaded. You can still choose a store from the list.
+    </p>
+  }
+
+  <p class="store-map__attribution">
+    Map data:
+    <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">
+      © OpenStreetMap contributors
+    </a>
+  </p>
+</section>

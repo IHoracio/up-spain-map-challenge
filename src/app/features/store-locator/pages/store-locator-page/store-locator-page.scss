@@ -1,0 +1,122 @@
+.store-locator-page {
+  width: min(100%, 82rem);
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  color: #19362c;
+}
+
+.store-locator-page__header {
+  margin-bottom: 1.25rem;
+}
+
+.store-locator-page__eyebrow {
+  margin: 0 0 0.35rem;
+  color: #176b50;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.store-locator-page__title {
+  margin: 0;
+  color: #17352b;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.store-locator-page__intro {
+  max-width: 48rem;
+  margin: 0.65rem 0 0;
+  color: #435e53;
+  line-height: 1.5;
+}
+
+.store-locator-page__workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.8fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.store-locator-page__map-panel,
+.store-locator-page__details-panel {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #d1ded7;
+  border-radius: 0.75rem;
+  background: #f9fbf9;
+  box-shadow: 0 0.25rem 0.9rem rgb(16 46 33 / 7%);
+}
+
+.store-locator-page__details-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 761px) {
+  .store-locator-page__details-panel {
+    align-self: stretch;
+  }
+}
+
+.store-locator-page__prompt {
+  margin: 0;
+  color: #435e53;
+  line-height: 1.5;
+}
+
+.store-locator-page__state,
+.store-locator-page__not-found {
+  padding: 1rem;
+  border: 1px solid #d1ded7;
+  border-radius: 0.6rem;
+  background: #fff;
+  color: #19362c;
+}
+
+.store-locator-page__state[role="alert"] {
+  border-left: 0.25rem solid #9a2f20;
+  background: #fff0ed;
+}
+
+.store-locator-page__state p,
+.store-locator-page__not-found p {
+  margin: 0;
+}
+
+.store-locator-page__retry {
+  min-height: 2.75rem;
+  margin-top: 0.65rem;
+  padding-inline: 0.85rem;
+  border: 1px solid #14563f;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #14563f;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.store-locator-page__back-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: #14563f;
+  font-weight: 700;
+  text-underline-offset: 0.15em;
+}
+
+@media (max-width: 760px) {
+  .store-locator-page__workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .store-locator-page {
+    padding: 0.75rem;
+  }
+
+  .store-locator-page__map-panel,
+  .store-locator-page__details-panel {
+    padding: 0.75rem;
+  }
+}
