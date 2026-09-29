@@ -20,6 +20,11 @@ export const LEAFLET_ADAPTER = new InjectionToken<LeafletAdapter>(
         ).href,
         shadowUrl: new URL('leaflet/images/marker-shadow.png', document.baseURI)
           .href,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        shadowSize: [41, 41],
+        shadowAnchor: [12, 41],
+        tooltipAnchor: [16, -28],
       });
 
       return {

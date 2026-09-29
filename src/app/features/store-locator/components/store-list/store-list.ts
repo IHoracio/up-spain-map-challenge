@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
 import { StoreAddressService } from '../../../../core/services/store-address.service';
 import type { Store } from '../../../../core/models/store.model';
+import { isValidCoordinates } from '../../../../core/utils/store-coordinates';
 
 @Component({
   selector: 'app-store-list',
@@ -15,6 +16,7 @@ export class StoreListComponent {
   readonly emptyMessage = input('No stores are available.');
   readonly storeSelected = output<Store>();
   protected readonly storeAddresses = inject(StoreAddressService);
+  protected readonly isValidCoordinates = isValidCoordinates;
 
   protected selectStore(store: Store): void {
     this.storeSelected.emit(store);

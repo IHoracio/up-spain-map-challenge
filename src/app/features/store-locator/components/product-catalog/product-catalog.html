@@ -24,7 +24,8 @@
           <h3 class="product-catalog__name">{{ productName(product) }}</h3>
           <p class="product-catalog__price">
             @if (hasPrice(product)) {
-              {{ product.price | currency: 'EUR':'symbol':'1.2-2' }}
+              @let formattedPrice = product.price | currency: 'EUR':'symbol':'1.2-2';
+              {{ formattedPrice?.slice(1) }} {{ formattedPrice?.slice(0, 1) }}
             } @else {
               Price unavailable
             }

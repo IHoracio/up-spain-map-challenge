@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router, RouterOutlet } from '@angular/router';
+import { of } from 'rxjs';
 import * as axe from 'axe-core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { MOCK_PRODUCTS } from '../../core/data/mock-products';
 import { MOCK_STORES } from '../../core/data/mock-stores';
+import { StoreAddressService } from '../../core/services/store-address.service';
 import {
   createLeafletTestDouble,
   provideProductResponse,
@@ -30,6 +32,10 @@ describe('Store locator accessibility', () => {
         provideRouter(routes),
         provideStoreResponse(MOCK_STORES),
         provideProductResponse(MOCK_PRODUCTS),
+        {
+          provide: StoreAddressService,
+          useValue: { getAddress: () => of('Calle Mayor, 5') },
+        },
         leaflet.provider,
       ],
     }).compileComponents();
@@ -48,6 +54,9 @@ describe('Store locator accessibility', () => {
 
   it('has no axe WCAG A or AA violations on the selected-store route', async () => {
     await open('/stores/1');
+    expect(document.activeElement).not.toBe(
+      fixture.nativeElement.querySelector('.store-locator-page__title'),
+    );
 
     const result = await axe.run(fixture.nativeElement, {
       runOnly: {
