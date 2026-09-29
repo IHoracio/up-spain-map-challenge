@@ -30,6 +30,9 @@ const testRoutes: Routes = [
     children: STORE_LOCATOR_ROUTES,
   },
 ];
+const locatableStoreCount = MOCK_STORES.filter((store) =>
+  isValidCoordinates(store.latitude, store.longitude),
+).length;
 
 describe('StoreLocatorPage', () => {
   let fixture: ComponentFixture<TestRouterHost>;
@@ -118,13 +121,9 @@ describe('StoreLocatorPage', () => {
     expect(page.textContent).toContain('7.25');
   });
 
-  it('hides stores when their location is unavailable', async () => {
-    vi.spyOn(TestBed.inject(StoreAddressService), 'getAddress').mockImplementation((store) =>
-      of(
-        isValidCoordinates(store.latitude, store.longitude)
-          ? 'Calle Mayor, 5'
-          : 'Address unavailable',
-      ),
+  it('keeps stores selectable when address lookup fails but hides invalid coordinates', async () => {
+    vi.spyOn(TestBed.inject(StoreAddressService), 'getAddress').mockReturnValue(
+      of('Address unavailable'),
     );
 
     await open('/stores');
@@ -132,11 +131,13 @@ describe('StoreLocatorPage', () => {
       '.store-list__button',
     ) as NodeListOf<HTMLButtonElement>;
 
+    expect(buttons).toHaveLength(locatableStoreCount);
+    expect(buttons[0].textContent).toContain('Coordinates: 40.4168, -3.7038');
     expect([...buttons].some((button) => button.textContent?.includes('UP Lugo'))).toBe(false);
     expect(leaflet.markers).toHaveLength(7);
   });
 
-  it('keeps a store hidden while its location is pending', async () => {
+  it('keeps a store selectable while its address is pending', async () => {
     const pendingAddress = new Subject<string>();
     const pendingAddress$ = pendingAddress.asObservable();
     vi.spyOn(TestBed.inject(StoreAddressService), 'getAddress').mockImplementation((store) =>
@@ -148,16 +149,20 @@ describe('StoreLocatorPage', () => {
     await open('/stores');
     expect(
       [...fixture.nativeElement.querySelectorAll('.store-list__button')].some(
-        (button: HTMLButtonElement) => button.textContent?.includes('UP Madrid Centro'),
+        (button: HTMLButtonElement) =>
+          button.textContent?.includes('UP Madrid Centro') &&
+          button.textContent?.includes('Coordinates: 40.4168, -3.7038'),
       ),
-    ).toBe(false);
+    ).toBe(true);
 
     pendingAddress.next('Calle Mayor, 5');
     await fixture.whenStable();
     fixture.detectChanges();
     expect(
       [...fixture.nativeElement.querySelectorAll('.store-list__button')].some(
-        (button: HTMLButtonElement) => button.textContent?.includes('UP Madrid Centro'),
+        (button: HTMLButtonElement) =>
+          button.textContent?.includes('UP Madrid Centro') &&
+          button.textContent?.includes('Calle Mayor, 5'),
       ),
     ).toBe(true);
   });
@@ -187,7 +192,7 @@ describe('StoreLocatorPage', () => {
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelectorAll('.store-list__button'),
-    ).toHaveLength(MOCK_STORES.length);
+    ).toHaveLength(locatableStoreCount);
   });
 
   it('selects a matching search result and updates the route, details, and catalog', async () => {
@@ -219,7 +224,7 @@ describe('StoreLocatorPage', () => {
     fixture.detectChanges();
     expect(
       fixture.nativeElement.querySelectorAll('.store-list__button'),
-    ).toHaveLength(MOCK_STORES.length);
+    ).toHaveLength(locatableStoreCount);
   });
 
   it('shows an empty state when the store service returns no stores', async () => {
@@ -253,7 +258,7 @@ describe('StoreLocatorPage', () => {
     expect(getStores).toHaveBeenCalledTimes(2);
     expect(
       fixture.nativeElement.querySelectorAll('.store-list__button'),
-    ).toHaveLength(MOCK_STORES.length);
+    ).toHaveLength(locatableStoreCount);
   });
 
   it('shows product loading feedback and then the loaded catalog', async () => {

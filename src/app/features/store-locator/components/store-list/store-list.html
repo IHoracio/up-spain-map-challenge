@@ -8,8 +8,8 @@
   } @else {
     <ul class="store-list__items" aria-label="Stores in Spain">
       @for (store of stores(); track store.id) {
-        @let address = storeAddresses.getAddress(store) | async;
-        @if (address && address !== 'Address unavailable') {
+        @if (isValidCoordinates(store.latitude, store.longitude)) {
+          @let address = storeAddresses.getAddress(store) | async;
           <li class="store-list__item">
             <button
               class="store-list__button"
@@ -20,7 +20,13 @@
               (click)="selectStore(store)"
             >
               <span class="store-list__name">{{ store.name }}</span>
-              <span class="store-list__location">{{ address }}</span>
+              <span class="store-list__location">
+                @if (address && address !== 'Address unavailable') {
+                  {{ address }}
+                } @else {
+                  Coordinates: {{ store.latitude }}, {{ store.longitude }}
+                }
+              </span>
             </button>
           </li>
         }
