@@ -9,6 +9,7 @@ import type { Product } from '../../../../core/models/product.model';
 import { ProductService } from '../../../../core/services/product.service';
 import { StoreAddressService } from '../../../../core/services/store-address.service';
 import { StoreService } from '../../../../core/services/store.service';
+import { isValidCoordinates } from '../../../../core/utils/store-coordinates';
 import {
   createLeafletTestDouble,
   provideProductResponse,
@@ -115,14 +116,48 @@ describe('StoreLocatorPage', () => {
     expect(page.textContent).toContain('7.25');
   });
 
-  it('keeps a store with unusable coordinates available from the list', async () => {
+  it('hides stores when their location is unavailable', async () => {
+    vi.spyOn(TestBed.inject(StoreAddressService), 'getAddress').mockImplementation((store) =>
+      of(
+        isValidCoordinates(store.latitude, store.longitude)
+          ? 'Calle Mayor, 5'
+          : 'Address unavailable',
+      ),
+    );
+
     await open('/stores');
     const buttons = fixture.nativeElement.querySelectorAll(
       '.store-list__button',
     ) as NodeListOf<HTMLButtonElement>;
 
-    expect([...buttons].some((button) => button.textContent?.includes('UP Lugo'))).toBe(true);
+    expect([...buttons].some((button) => button.textContent?.includes('UP Lugo'))).toBe(false);
     expect(leaflet.markers).toHaveLength(7);
+  });
+
+  it('keeps a store hidden while its location is pending', async () => {
+    const pendingAddress = new Subject<string>();
+    const pendingAddress$ = pendingAddress.asObservable();
+    vi.spyOn(TestBed.inject(StoreAddressService), 'getAddress').mockImplementation((store) =>
+      store.latitude === MOCK_STORES[0].latitude
+        ? pendingAddress$
+        : of('Calle Mayor, 5'),
+    );
+
+    await open('/stores');
+    expect(
+      [...fixture.nativeElement.querySelectorAll('.store-list__button')].some(
+        (button: HTMLButtonElement) => button.textContent?.includes('UP Madrid Centro'),
+      ),
+    ).toBe(false);
+
+    pendingAddress.next('Calle Mayor, 5');
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(
+      [...fixture.nativeElement.querySelectorAll('.store-list__button')].some(
+        (button: HTMLButtonElement) => button.textContent?.includes('UP Madrid Centro'),
+      ),
+    ).toBe(true);
   });
 
   it('filters the list with normalized search and keeps every valid map marker', async () => {
