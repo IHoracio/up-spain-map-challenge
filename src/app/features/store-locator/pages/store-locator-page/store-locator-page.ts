@@ -96,12 +96,6 @@ export class StoreLocatorPage {
       : null,
   );
 
-  private readonly focusSelectedView = effect(() => {
-    if (this.selectedStore() && !this.viewport.isMobile()) {
-      this.pageHeading()?.nativeElement.focus();
-    }
-  });
-
   private readonly selectedStoreEffect = effect(() => {
     const store = this.selectedStore();
 
@@ -119,8 +113,11 @@ export class StoreLocatorPage {
     this.loadStores();
   }
 
-  protected selectStore(store: Store): void {
-    void this.router.navigate(['/stores', store.id]);
+  protected async selectStore(store: Store): Promise<void> {
+    const navigated = await this.router.navigate(['/stores', store.id]);
+    if (navigated && !this.viewport.isMobile()) {
+      this.pageHeading()?.nativeElement.focus();
+    }
   }
 
   protected retryStores(): void {

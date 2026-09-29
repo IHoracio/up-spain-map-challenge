@@ -54,6 +54,9 @@ describe('Store locator accessibility', () => {
 
   it('has no axe WCAG A or AA violations on the selected-store route', async () => {
     await open('/stores/1');
+    expect(document.activeElement).not.toBe(
+      fixture.nativeElement.querySelector('.store-locator-page__title'),
+    );
 
     const result = await axe.run(fixture.nativeElement, {
       runOnly: {

@@ -32,11 +32,18 @@
   color: #14563f;
   font-size: 1.4rem;
   font-weight: 700;
+  line-height: 1;
   cursor: pointer;
 }
 
 .store-map__zoom-button:hover {
   background: #e8f3ed;
+}
+
+.store-map__zoom-icon {
+  display: inline-block;
+  line-height: 1;
+  transform: translateY(-1px);
 }
 
 .store-map__canvas {
